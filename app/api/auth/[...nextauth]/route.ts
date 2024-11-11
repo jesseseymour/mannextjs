@@ -1,11 +1,13 @@
 // import type { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import clientPromise from "@/lib/mongodb";
 
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || "";
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || "";
 
 export const authOptions = {
+  secret: process.env.AUTH_SECRET,
   // Configure one or more authentication providers
   providers: [
     DiscordProvider({
@@ -15,6 +17,24 @@ export const authOptions = {
   ],
 
   callbacks: {
+    async signIn({ user: discordUser = { name: null } }) {
+      const { name } = discordUser;
+      try {
+        const mongoClient = await clientPromise;
+        await mongoClient
+          .db(process.env.MONGODB_NAME)
+          .collection("users")
+          .updateOne(
+            { user_id: name },
+            { $set: { user_id: name } },
+            { upsert: true }
+          );
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+      return true;
+    },
     async redirect({ url, baseUrl }) {
       return `${baseUrl}/teams`;
     },
