@@ -1,12 +1,18 @@
+
 import Image from "next/image";
-import { testDatabaseConnection } from "../actions";
+import { getLeagues } from "./actions";
+import { ObjectId } from "mongodb";
+import clientPromise from "@/lib/mongodb";
+import { MongoClient } from "mongodb";
 import Link from "next/link";
+import { NextApiRequest, NextApiResponse, GetServerSideProps } from "next";
+import { fetchAllUsers } from "@/lib/data";
 
 export default async function Home() {
-  const isConnected = await testDatabaseConnection();
-
+  const users = fetchAllUsers();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      {/* {leagues.map(league => <div>{league.league_name}</div>)} */}
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           App Router: Get started by editing&nbsp;
@@ -52,7 +58,7 @@ export default async function Home() {
             priority
           />
         </div>
-        {isConnected ? (
+        {/* {isConnected ? (
           <h2 className="text-lg text-green-500">
             You are connected to MongoDB!
           </h2>
@@ -61,17 +67,7 @@ export default async function Home() {
             You are NOT connected to MongoDB. Check the <code>README.md</code>{" "}
             for instructions.
           </h2>
-        )}
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          This page uses the&nbsp;<strong>App Router</strong>. Check out the
-          Pages Router version here:&nbsp;
-          <Link
-            href="/"
-            className="underline transition-colors ease-in-out hover:text-green-500"
-          >
-            <code>pages/index.tsx</code>
-          </Link>
-        </p>
+        )} */}
       </div>
 
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">

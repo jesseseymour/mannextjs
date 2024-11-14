@@ -44,14 +44,11 @@ export async function fetchUserTeams() {
 export async function fetchTeams() {
   try {
     const mongoClient = await clientPromise;
-    const users = await mongoClient
+    return await mongoClient
       .db("manleague")
-      .collection("users")
+      .collection("teams")
       .find({})
-      //   .project({teams: {team_id: 1, team_name: 1, is_open: 1}})
       .toArray();
-    const allTeams = users.map((user) => user.teams);
-    return [...new Set(allTeams.flat())];
   } catch (error) {
     console.error(error);
   }

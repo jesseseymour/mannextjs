@@ -11,8 +11,7 @@ interface team_member {
 }
 interface team {
   team_name: string;
-  team_id: string;
-  team_members: team_member[];
+  url: string;
 }
 interface division {
   division_name: string;
@@ -32,14 +31,20 @@ interface Leagues {
   leagues: League[];
 }
 
-export const getLeagues = async (req: NextApiRequest, res: NextApiResponse) => {
+export async function createTeam(team: team) {
   try {
     const mongoClient = await clientPromise;
-    return await mongoClient.db("manleague").collection("leagues").find({});
+    console.log({...team, url: team.team_name.replace(' ', '-')})
 
-    return { props: {} };
-  } catch (e) {
-    console.error(e);
-    return { props: {} };
+    const newTeam = {...team, url: team.team_name.replace(' ', '-')};
+    await mongoClient
+      .db("manleague")
+      .collection("teams")
+      .insertOne(newTeam)
+
+    return newTeam;
+
+  } catch (error) {
+    console.error(error);
   }
-};
+}
