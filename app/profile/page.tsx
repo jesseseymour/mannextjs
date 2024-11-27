@@ -1,8 +1,12 @@
 import Profile from "./profile";
-import { fetchTeams } from "@/lib/data";
+import { fetchTeams, fetchUserTeams } from "@/lib/data";
 
 export default async function Page() {
-  const teams = await fetchTeams();
+  const my_teams = await fetchUserTeams();
 
-  return <Profile leagueTeams={JSON.stringify(teams)}/>;
+  return (
+    <Profile
+      myTeams={JSON.stringify(my_teams)}
+    />
+  );
 }
